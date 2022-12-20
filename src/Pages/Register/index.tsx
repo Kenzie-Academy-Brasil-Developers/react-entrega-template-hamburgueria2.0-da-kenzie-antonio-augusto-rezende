@@ -30,10 +30,6 @@ export const Register = () => {
     resolver: yupResolver(formShemaRegister),
   });
 
-  /*   const submitRegister: SubmitHandler<IRegister> = async (data) => {
-    console.log(data);
-  }; */
-
   return (
     <>
       {loading && <LoadingComp />}

@@ -1,13 +1,13 @@
 import { LogoMaster } from "../../Components/Logo";
 import { MainLogin } from "./style";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Inputs } from "../../Components/Inputs";
 import { useForm, UseFormRegister, FieldValues } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { formShemaLogin } from "./ShemaLogin";
 import { StyledPErrors } from "../../Components/Inputs/style";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContexts } from "../../Contexts/UserContexts/UserContexts";
 import { LoadingComp } from "../../Components/Loading";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,7 +19,11 @@ interface ILoginPage {
 }
 
 export const LoginPage = () => {
-  const { loading, submitLogin } = useContext(UserContexts);
+  const { loading, submitLogin, autoLogin } = useContext(UserContexts);
+  useEffect(() => {
+    autoLogin();
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -27,6 +31,7 @@ export const LoginPage = () => {
   } = useForm<ILoginPage>({
     resolver: yupResolver(formShemaLogin),
   });
+
   return (
     <>
       {loading && <LoadingComp />}

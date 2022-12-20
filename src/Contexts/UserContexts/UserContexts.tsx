@@ -16,10 +16,15 @@ interface IContextUserProps {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   setUser: React.Dispatch<React.SetStateAction<IGetAutorization | null>>;
   setUserLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  autoLogin: () => void;
 }
 
 export interface IGetAutorization extends IRegister {
   id: number;
+  confirmPassword: string;
+  email: string;
+  name: string;
+  password: string;
 }
 
 interface ILogin {
@@ -62,8 +67,9 @@ export const UserProvider = ({ children }: iChildren) => {
 
   useEffect(() => {
     async function loaderUser() {
-      const token = window.localStorage.getItem("@TOKENHAMBURGUEIRA");
+      const token = localStorage.getItem("@TOKENHAMBURGUEIRA");
       const id = window.localStorage.getItem("@IDUSERHAMBURGUEIRA");
+
       if (!token) {
         setUserLoading(false);
         return;
@@ -74,11 +80,11 @@ export const UserProvider = ({ children }: iChildren) => {
             authorization: `Bearer ${token}`,
           },
         });
+        setUserLoading(true);
 
         setUser(data);
       } catch (error) {
         window.localStorage.clear();
-        toast.error("Voce nao tem token");
         console.error(error);
       } finally {
         setUserLoading(false);
@@ -107,11 +113,12 @@ export const UserProvider = ({ children }: iChildren) => {
       setLoading(true);
 
       const { data } = await api.post<IData>("/login", user);
-      navigate(`/home/${data.user.id}`);
 
       window.localStorage.clear();
       window.localStorage.setItem("@TOKENHAMBURGUEIRA", data.accessToken);
       window.localStorage.setItem("@IDUSERHAMBURGUEIRA", data.user.id);
+
+      navigate(`/home/${data.user.id}`);
 
       reset();
     } catch (error) {
@@ -125,6 +132,14 @@ export const UserProvider = ({ children }: iChildren) => {
     }
   };
 
+  function autoLogin() {
+    const token = window.localStorage.getItem("@TOKENHAMBURGUEIRA");
+    const id = window.localStorage.getItem("@IDUSERHAMBURGUEIRA");
+
+    if (token) {
+      navigate(`/home/${id}`);
+    }
+  }
   return (
     <UserContexts.Provider
       value={{
@@ -137,6 +152,7 @@ export const UserProvider = ({ children }: iChildren) => {
         setOpenModal,
         setUser,
         setUserLoading,
+        autoLogin,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Header } from "../../Components/Header";
 import { ListProducts } from "../../Components/ListProducts";
 import { MainContainer } from "../../Components/MainContainer";
@@ -10,8 +10,11 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const Home = () => {
-  const { product, productSearch } = useContext(CartContexts);
+  const { product, productSearch, loaderProducts } = useContext(CartContexts);
   const { openModal } = useContext(UserContexts);
+  useEffect(() => {
+    loaderProducts();
+  }, []);
 
   return (
     <>

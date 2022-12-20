@@ -24,6 +24,7 @@ interface IContextCartProps {
   sumTotal: number;
   carrinho(itemSelect: IProducts): void;
   carrinhoSub(itemSelect: IProducts): void;
+  loaderProducts: () => Promise<void>;
 }
 export interface ICarrinho extends IProducts {
   quantidade: number;
@@ -129,20 +130,19 @@ export const CartProvider = ({ children }: iChildren) => {
     window.localStorage.clear();
     navigate("/");
   };
-  useEffect(() => {
-    async function loaderProducts() {
-      const token = window.localStorage.getItem("@TOKENHAMBURGUEIRA");
-      try {
-        if (token) {
-          const response = await getProducts(token);
-          setProduct(response);
-        }
-      } catch (error) {
-        console.error(error);
+
+  async function loaderProducts() {
+    const token = window.localStorage.getItem("@TOKENHAMBURGUEIRA");
+    try {
+      if (token) {
+        const response = await getProducts(token);
+        setProduct(response);
       }
+    } catch (error) {
+      navigate("/");
+      console.error(error);
     }
-    loaderProducts();
-  }, []);
+  }
 
   return (
     <CartContexts.Provider
@@ -165,6 +165,7 @@ export const CartProvider = ({ children }: iChildren) => {
         sumTotal,
         carrinho,
         carrinhoSub,
+        loaderProducts,
       }}
     >
       {children}

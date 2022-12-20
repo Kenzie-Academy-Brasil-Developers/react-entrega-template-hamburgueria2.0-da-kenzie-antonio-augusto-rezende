@@ -58,6 +58,7 @@ export const StyledCotainerDiv = styled.div`
       align-items: center;
       justify-content: center;
       margin-left: 25px;
+      position: relative;
       p {
         background-color: var(--color-primary);
         border-radius: 7px;
@@ -65,8 +66,8 @@ export const StyledCotainerDiv = styled.div`
         border: none;
         color: #ffffff;
         position: absolute;
-        right: 225px;
-        top: 10px;
+        right: 0px;
+        top: 0px;
         font-family: Inter;
         font-size: 14px;
         font-weight: 900;
@@ -87,12 +88,12 @@ export const StyledCotainerDiv = styled.div`
     }
     div {
       width: 100%;
-      & > button:first-of-type {
+      /* & > button:first-of-type {
         p {
           right: 50px;
           top: 60px;
         }
-      }
+      } */
     }
   }
 `;

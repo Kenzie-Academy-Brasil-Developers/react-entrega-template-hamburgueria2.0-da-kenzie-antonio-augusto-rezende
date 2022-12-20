@@ -6,8 +6,8 @@ interface iChildren {
 
 export const AllProviders = ({ children }: iChildren) => {
   return (
-    <UserProvider>
-      <CartProvider>{children}</CartProvider>
-    </UserProvider>
+    <CartProvider>
+      <UserProvider>{children}</UserProvider>
+    </CartProvider>
   );
 };
